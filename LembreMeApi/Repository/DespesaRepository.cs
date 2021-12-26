@@ -53,24 +53,17 @@ namespace LembreMeApi.Repository
 
         }
 
-        public DespesaModel ConsultarDespesa(ConsultarDespesaReq model)
+        public List<DespesaModel> ConsultarDespesa(ConsultarDespesaReq model)
         {
             var parameters = new[] {
-                new MySqlParameter("pEmail", MySqlDbType.VarChar) {Direction = ParameterDirection.Input, Value = model.IdUsuario},
-                new MySqlParameter("pSenha", MySqlDbType.Date) { Direction = ParameterDirection.Input, Value = model.Vencimento },
-                new MySqlParameter("pSenha", MySqlDbType.Int32) { Direction = ParameterDirection.Input, Value = model.Baixado }
+                new MySqlParameter("pIdUsuario", MySqlDbType.VarChar) {Direction = ParameterDirection.Input, Value = model.IdUsuario},
+                new MySqlParameter("pBaixado", MySqlDbType.Date) { Direction = ParameterDirection.Input, Value = model.Vencimento },
+                new MySqlParameter("pVencimento", MySqlDbType.Int32) { Direction = ParameterDirection.Input, Value = model.Baixado }
                 };
 
             var retornoDb = _aplicacaoContexto.Despesa.FromSqlRaw("call sp_despesa_consultar({0}, {1}, {2})", parameters).ToList();
             if (retornoDb.Count == 0) throw new Exception("Nenhuma despesa foi encontrada.");
-            return new DespesaModel
-            {
-                Vencimento = retornoDb[0].Vencimento,
-                DataPagamento = retornoDb[0].DataPagamento,
-                Id = retornoDb[0].Id,
-                Titulo = retornoDb[0].Titulo,
-                Valor = retornoDb[0].Valor  
-            };
+            return retornoDb;
         }
 
     }

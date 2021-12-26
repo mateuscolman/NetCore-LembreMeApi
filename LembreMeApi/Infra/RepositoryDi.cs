@@ -7,6 +7,7 @@ namespace LembreMeApi.Infra
         public static void AddRepository(this IServiceCollection services)
         {
             services.AddTransient<UsuarioRepository>();
+            services.AddTransient<DespesaRepository>();
         }
     }
 }

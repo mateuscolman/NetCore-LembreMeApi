@@ -4,6 +4,7 @@ CREATE TABLE Despesa (
   titulo varchar(240),
   vencimento date,
   baixado int default 0,
+  valor decimal(10,2),
   idUsuario varchar(50),
   FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
 )
