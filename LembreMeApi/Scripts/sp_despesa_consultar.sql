@@ -24,6 +24,7 @@ begin
 		id, 
 		titulo, 
 		vencimento, 
+		'1999-01-01' as dataPagamento,
 		valor
 	from 
 		despesa

@@ -2,7 +2,7 @@ DELIMITER $$
 create PROCEDURE sp_despesa_inserir(
 	pTitulo varchar(240),
 	pVencimento date,
-	pValor decimal,
+	pValor decimal(10,2),
 	pIdUsuario varchar(50))
 begin
 	declare vId varchar(50);

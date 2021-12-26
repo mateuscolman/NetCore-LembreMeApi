@@ -9,8 +9,8 @@ begin
 	set vId = uuid();
 	if not exists(select id from despesa where titulo = pTitulo and valor = pValor and vencimento = pVencimento)
 	then
-		insert into despesa(id, titulo, valor, vencimento, idUsuario)
-		values(vId, pTitulo, pValor, pVencimento, pIdUsuario);
+		insert into despesa(id, titulo, valor, vencimento, dataPagamento, idUsuario)
+		values(vId, pTitulo, pValor, pVencimento, '1999-01-01', pIdUsuario);
 		select vId as id;
 	else
 		select '0' as id;
