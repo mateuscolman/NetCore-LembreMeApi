@@ -21,7 +21,7 @@ namespace LembreMeApi.Controllers
         [HttpPost]
         [Route("inserir")]
         [ProducesResponseType(typeof(IEnumerable<InserirComSPModel>), StatusCodes.Status200OK)]
-        public ActionResult<dynamic> BuscarDespesas(CadastrarDespesaSwagger model)
+        public ActionResult<dynamic> InserirDespesa(CadastrarDespesaSwagger model)
         {
             try
             {
@@ -35,8 +35,43 @@ namespace LembreMeApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
-                throw;
+                return BadRequest( new { Erro = $"Não foi possível cadastrar a despesa | Motivo: {ex.Message}" } );
+            }
+        }
+
+        [HttpGet]
+        [Route("consultar")]
+        [ProducesResponseType(typeof(IEnumerable<DespesaModel>), StatusCodes.Status200OK)]
+        public ActionResult<dynamic> ConsultarDespesas([FromQuery] ConsultarDespesaSwagger model)
+        {
+            try
+            {
+                model.Vencimento = model.Vencimento == DateTime.MinValue ? DateTime.Now : model.Vencimento;
+                return Ok(_despesaServices.ConsultarDespesa(new ConsultarDespesaReq
+                {
+                    Baixado = model.Baixado,
+                    IdUsuario = TokenId,
+                    Vencimento = model.Vencimento
+                }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Erro = $"Não foi possível consultar a despesa | Motivo: {ex.Message}" });
+            }
+        }
+
+        [HttpPut]
+        [Route("baixar")]
+        [ProducesResponseType(typeof(IEnumerable<DespesaModel>), StatusCodes.Status200OK)]
+        public ActionResult<dynamic> BaixarDespesa(BaixarDespesaReq model)
+        {
+            try
+            {
+                return _despesaServices.BaixarDespesa(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Erro = $"Não foi possível baixar a despesa | Motivo: {ex.Message}" });
             }
         }
     }

@@ -15,22 +15,16 @@ namespace LembreMeApi.Repository
             _aplicacaoContexto = aplicacaoContexto;
         }
 
-        public UsuarioModel GetUsuario(LoginReq model)
+        public UsuarioModel ConsultarUsuario(LoginReq model)
         {
             var parameters = new[] {
                 new MySqlParameter("pEmail", MySqlDbType.VarChar) {Direction = ParameterDirection.Input, Value = model.Email},
                 new MySqlParameter("pSenha", MySqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = model.Senha }
                 };
 
-            var retornoDb = _aplicacaoContexto.Usuario.FromSqlRaw("call sp_usuario_login({0}, {1})", parameters).ToList();
-            if (retornoDb.Count == 0) throw new Exception("Usuario ou senha invalido");
-            return new UsuarioModel
-            {
-                Email = retornoDb[0].Email,
-                Id = retornoDb[0].Id,
-                Nome = retornoDb[0].Nome,
-                Senha = retornoDb[0].Senha
-            };
+            var retornoDb = _aplicacaoContexto.Usuario.FromSqlRaw("call sp_usuario_login({0}, {1})", parameters).ToList().FirstOrDefault();
+            if (retornoDb?.Id == "0") throw new Exception("Usuario ou senha invalido");
+            return retornoDb;
         }
 
         public InserirComSPModel CadastrarUsuario(UsuarioReq model)
@@ -41,15 +35,11 @@ namespace LembreMeApi.Repository
                 new MySqlParameter("pEmail", MySqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = model.Email }
                 };
 
-            var retornoDb =  _aplicacaoContexto.InserirComSP.FromSqlRaw("call sp_usuario_cadastrar({0}, {1}, {2})", parameters).ToList();
+            var retornoDb =  _aplicacaoContexto.InserirComSP.FromSqlRaw("call sp_usuario_cadastrar({0}, {1}, {2})", parameters).ToList().FirstOrDefault();
 
-            if (retornoDb.Count == 0) throw new Exception("Não foi possível cadastrar o usuario, por favor tente mais tarde.");
+            if (retornoDb.Id == "0") throw new Exception("Não foi possível cadastrar o usuario, por favor tente mais tarde.");
 
-            return new InserirComSPModel
-            {
-                Id = retornoDb[0].Id,
-            };
-            
+            return retornoDb;            
         }
 
     }
