@@ -1,4 +1,5 @@
 ﻿using LembreMeApi.Domains.Dto;
+using LembreMeApi.Models;
 using LembreMeApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,12 @@ namespace LembreMeApi.Controllers
 
         [HttpPost]
         [Route("inserir")]
-        [ProducesResponseType(typeof(IEnumerable<TokenResp>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<InserirComSPModel>), StatusCodes.Status200OK)]
         public ActionResult<dynamic> BuscarDespesas(CadastrarDespesaSwagger model)
         {
             try
             {
-                return Ok(_despesaServices.InserirDesesa(new CadastrarDespesaReq
+                return Ok(_despesaServices.InserirDespesa(new CadastrarDespesaReq
                 {
                     IdUsuario = TokenId,
                     Titulo = model.Titulo,

@@ -8,6 +8,7 @@ namespace LembreMeApi.Infra
         {
             // Serviços Disponíveis
             services.AddScoped<UsuarioService>();
+            services.AddScoped<DespesaServices>();
 
             // Passagem do Provider para Construção da Fábrica de Serviços
             services.AddScoped(serviceProvider => new FactoryService(serviceProvider));                        

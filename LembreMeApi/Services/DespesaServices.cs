@@ -13,9 +13,14 @@ namespace LembreMeApi.Services
             _despesaRepository = despesaRepository;
         }
 
-        public InserirComSPModel InserirDesesa(CadastrarDespesaReq model)
+        public InserirComSPModel InserirDespesa(CadastrarDespesaReq model)
         {
             return _despesaRepository.CadastrarDespesa(model);
+        }
+
+        public List<DespesaModel> ConsultarDespesa(ConsultarDespesaReq model)
+        {
+            return _despesaRepository.ConsultarDespesa(model);
         }
     }
 }

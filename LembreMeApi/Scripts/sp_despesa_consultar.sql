@@ -1,12 +1,12 @@
 DELIMITER $$
 
 create procedure sp_despesa_consultar(
-	pVencimento date,
 	pIdUsuario varchar(50),
-	baixado int
+	pBaixado int,
+    pVencimento date
 )
 begin
-	if (baixado = 1)
+	if (pBaixado = 1)
 	then
 	select 
 		id, 
@@ -17,7 +17,8 @@ begin
 	from 
 		despesa
 	where
-		idUsuario = pIdUsuario;	
+		idUsuario = pIdUsuario	
+        and month(vencimento) = month(pVencimento);
 	else
 	select 
 		id, 
@@ -27,9 +28,10 @@ begin
 	from 
 		despesa
 	where
-		idUsuario = pIdUsuario	
-		baixado = 0;
-	end if
+		idUsuario = pIdUsuario
+        and month(vencimento) = month(pVencimento)
+		and baixado = pBaixado;
+	end if;
 end $$
 
 DELIMITER ;
