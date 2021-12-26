@@ -8,7 +8,7 @@ namespace LembreMeApi.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/depesas/")]
+    [Route("api/despesa/")]
     public class DespesasController : BaseController
     {
         private readonly DespesaServices _despesaServices;
