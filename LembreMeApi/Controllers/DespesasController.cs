@@ -1,4 +1,5 @@
 ﻿using LembreMeApi.Domains.Dto;
+using LembreMeApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +10,33 @@ namespace LembreMeApi.Controllers
     [Route("api/depesas/")]
     public class DespesasController : BaseController
     {
-        [HttpGet]
-        [Route("buscar")]
-        [ProducesResponseType(typeof(IEnumerable<TokenResp>), StatusCodes.Status200OK)]
-        public ActionResult<dynamic> BuscarDespesas()
+        private readonly DespesaServices _despesaServices;
+
+        public DespesasController(DespesaServices despesaServices)
         {
-            return Ok(new { Mensagem = $"Token: {TokenId}" });
+            _despesaServices = despesaServices;
+        }
+
+        [HttpPost]
+        [Route("inserir")]
+        [ProducesResponseType(typeof(IEnumerable<TokenResp>), StatusCodes.Status200OK)]
+        public ActionResult<dynamic> BuscarDespesas(CadastrarDespesaSwagger model)
+        {
+            try
+            {
+                return Ok(_despesaServices.InserirDesesa(new CadastrarDespesaReq
+                {
+                    IdUsuario = TokenId,
+                    Titulo = model.Titulo,
+                    Valor = model.Valor,
+                    Vencimento = model.Vencimento
+                }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+                throw;
+            }
         }
     }
 }
