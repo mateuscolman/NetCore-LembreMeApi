@@ -13,7 +13,7 @@ namespace LembreMeApi.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public TokenResp GetUsuario(LoginReq model)
+        public TokenResp ConsultarUsuario(LoginReq model)
         {
             var usuario = _usuarioRepository.ConsultarUsuario(model);            
             var token = TokenService.GenerateToken(usuario);

@@ -47,12 +47,15 @@ namespace LembreMeApi.Controllers
             try
             {
                 model.Vencimento = model.Vencimento == DateTime.MinValue ? DateTime.Now : model.Vencimento;
-                return Ok(_despesaServices.ConsultarDespesa(new ConsultarDespesaReq
+                var returnService = _despesaServices.ConsultarDespesa(new ConsultarDespesaReq
                 {
                     Baixado = model.Baixado,
                     IdUsuario = TokenId,
                     Vencimento = model.Vencimento
-                }));
+                });
+                if (returnService.Count == 0) return NotFound(new {Mensagem = "Nenhuma despesa foi encontrada." });
+
+                return returnService;
             }
             catch (Exception ex)
             {
@@ -62,7 +65,7 @@ namespace LembreMeApi.Controllers
 
         [HttpPut]
         [Route("baixar")]
-        [ProducesResponseType(typeof(IEnumerable<DespesaModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<InserirComSPModel>), StatusCodes.Status200OK)]
         public ActionResult<dynamic> BaixarDespesa(BaixarDespesaReq model)
         {
             try
@@ -72,6 +75,21 @@ namespace LembreMeApi.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { Erro = $"Não foi possível baixar a despesa | Motivo: {ex.Message}" });
+            }
+        }
+
+        [HttpPut]
+        [Route("alterar")]
+        [ProducesResponseType(typeof(IEnumerable<InserirComSPModel>), StatusCodes.Status200OK)]
+        public ActionResult<dynamic> AlterarDespesa(AlterarDespesaReq model)
+        {
+            try
+            {
+                return Ok(_despesaServices.AlterarDespesa(model));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Erro = $"Não foi possível alterar a despesa | Motivo: {ex.Message}" });
             }
         }
     }

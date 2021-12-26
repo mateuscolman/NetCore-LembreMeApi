@@ -5,18 +5,25 @@ create procedure sp_despesa_baixar(
 	pDataPagamento date	
 )
 begin
-	if exists(select id from despesa where id = pId)
+	declare jaBaixado int;
+	set jaBaixado = (COALESCE(select id from despesa where id = pId, 0))
+	if (jaBaixado <> 1)
 	then
-		update despesa
-		set 
-			baixado = 1,
-			dataPagamento = pDataPagamento
-		where 
-			id = pId;		
-		select pId as id
-	else
-		select '0' as id
-	end if
+		if exists(select id from despesa where id = pId)
+		then
+			update despesa
+			set 
+				baixado = 1,
+				dataPagamento = pDataPagamento
+			where 
+				id = pId;		
+			select pId as id;
+			return;
+		else
+			select '0' as id;
+			return;
+		end if;
+	end if;	
 end $$
 
 DELIMITER ;
