@@ -17,13 +17,13 @@ namespace LembreMeApi.Controllers
         }
 
         [HttpPost]
-        [Route("auth")]
+        [Route("login")]
         [ProducesResponseType(typeof(IEnumerable<TokenResp>), StatusCodes.Status200OK)]
-        public ActionResult<dynamic> GetUsuario([FromBody] LoginReq model)
+        public ActionResult<dynamic> Login([FromBody] LoginReq model)
         {
             try
             {
-                var token = _usuarioService.GetUsuario(model);                
+                var token = _usuarioService.ConsultarUsuario(model);                
                 return Ok(token);
             }
             catch (Exception ex)
@@ -32,7 +32,6 @@ namespace LembreMeApi.Controllers
                 return BadRequest(new { Erro = $"Erro ao autenticar. Motivo: {ex.Message}" });
             }
         }
-
         
         [HttpPost]
         [Route("cadastrar")]

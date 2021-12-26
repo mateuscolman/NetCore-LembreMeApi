@@ -49,6 +49,17 @@ namespace LembreMeApi.Repository
             return retornoDb;
         }
 
+        public InserirComSPModel AlterarDespesa(AlterarDespesaReq model)
+        {
+            var parameters = new[] {
+                new MySqlParameter("pCampo", MySqlDbType.VarChar) {Direction = ParameterDirection.Input, Value = model.Campo},
+                new MySqlParameter("pValor", MySqlDbType.Int32) { Direction = ParameterDirection.Input, Value = model.Valor },
+                new MySqlParameter("pId", MySqlDbType.Date) { Direction = ParameterDirection.Input, Value = model.Id },
+                };
+
+            var retornoDb = _aplicacaoContexto.InserirComSP.FromSqlRaw("call sp_despesa_alterar({0}, {1}, {2})", parameters).ToList().FirstOrDefault();
+            return retornoDb;
+        }
 
     }
 }

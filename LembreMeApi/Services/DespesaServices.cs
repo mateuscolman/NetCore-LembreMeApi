@@ -23,8 +23,7 @@ namespace LembreMeApi.Services
 
         public List<DespesaModel> ConsultarDespesa(ConsultarDespesaReq model)
         {
-            var retornoRepos = _despesaRepository.ConsultarDespesa(model);
-            if (retornoRepos.Count == 0) throw new Exception("Nenhuma despesa foi encontrada.");
+            var retornoRepos = _despesaRepository.ConsultarDespesa(model);            
             return retornoRepos;
         }
 
@@ -32,6 +31,13 @@ namespace LembreMeApi.Services
         {
             var retornoRepos = _despesaRepository.BaixarDespesa(model);
             if (retornoRepos.Id == "0") throw new Exception("Despesa não foi encontrada, refaça a operação.");
+            return retornoRepos;
+        }
+
+        public InserirComSPModel AlterarDespesa(AlterarDespesaReq model)
+        {
+            var retornoRepos = _despesaRepository.AlterarDespesa(model);
+            if (retornoRepos.Id == "0") throw new Exception("Não foi possível alterar a despesa, campo não encontrado.");
             return retornoRepos;
         }
     }
