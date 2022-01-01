@@ -24,6 +24,7 @@ begin
 			return;
 		end if;
 	end if;	
+	select '0' as id;
 end $$
 
 DELIMITER ;

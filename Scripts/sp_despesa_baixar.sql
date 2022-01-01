@@ -6,8 +6,8 @@ create procedure sp_despesa_baixar(
 )
 begin
 	declare jaBaixado int;
-	set jaBaixado = (COALESCE(select id from despesa where id = pId, 0))
-	if (jaBaixado <> 1)
+	set jaBaixado = COALESCE((select baixado from despesa where id = pId limit 1), 0);        
+	if (jaBaixado != 1)
 	then
 		if exists(select id from despesa where id = pId)
 		then
@@ -18,13 +18,13 @@ begin
 			where 
 				id = pId;		
 			select pId as id;
-			return;
+			
 		else
-			select '0' as id;
-			return;
+			select '0' as id;			 
 		end if;
-	end if;	
+	else
 	select '0' as id;
+    end if;
 end $$
 
 DELIMITER ;
