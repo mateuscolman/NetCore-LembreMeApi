@@ -1,5 +1,6 @@
 ﻿using LembreMeApi.Domains.Dto;
 using LembreMeApi.Models;
+using LembreMeApi.Services;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using System.Data;
@@ -19,7 +20,7 @@ namespace LembreMeApi.Repository
         {
             var parameters = new[] {
                 new MySqlParameter("pEmail", MySqlDbType.VarChar) {Direction = ParameterDirection.Input, Value = model.Email},
-                new MySqlParameter("pSenha", MySqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = model.Senha }
+                new MySqlParameter("pSenha", MySqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = CriptografiaService.Encrypt(model.Senha)}
                 };
 
             var retornoDb = _aplicacaoContexto.Usuario.FromSqlRaw("call sp_usuario_login({0}, {1})", parameters).ToList().FirstOrDefault();
@@ -31,7 +32,7 @@ namespace LembreMeApi.Repository
         {
             var parameters = new[] {
                 new MySqlParameter("pNome", MySqlDbType.VarChar) {Direction = ParameterDirection.Input, Value = model.Nome},
-                new MySqlParameter("pSenha", MySqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = model.Senha },
+                new MySqlParameter("pSenha", MySqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = CriptografiaService.Encrypt(model.Senha)},
                 new MySqlParameter("pEmail", MySqlDbType.VarChar) { Direction = ParameterDirection.Input, Value = model.Email }
                 };
 
